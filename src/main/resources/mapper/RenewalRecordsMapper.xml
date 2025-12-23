@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.uz.mapper.RenewalRecordsMapper">
+    <select id="pageQuery" resultType="xyz.uz.domain.vo.RenewalRecordVO">
+        select
+            renewal_records.id,
+            renewal_records.borrow_record_id,
+            book.name as "bookName",
+            renewal_records.student_id,
+            student.name as "studentName",
+            renewal_records.renew_duration,
+            renewal_records.status,
+            renewal_records.review_time,
+            renewal_records.reviewer_id,
+            renewal_records.review_comment,
+            renewal_records.create_user,
+            renewal_records.create_time,
+            renewal_records.update_user,
+            renewal_records.update_time,
+            renewal_records.is_delete,
+            renewal_records.version
+        from
+            renewal_records
+        left join
+            user student on student.id = renewal_records.student_id
+        left join
+            borrow_records on borrow_records.id = renewal_records.borrow_record_id
+        left join
+            book on book.id = borrow_records.book_id
+        <where>
+            <if test="renewalRecordQuery.borrowRecordId != null and renewalRecordQuery.borrowRecorcId != ''">
+                renewal_records.borrow_record_id = #{renewalRecordQuery.borrowRecorcId}
+            </if>
+            <if test="renewalRecordQuery.studentId != null and renewalRecordQuery.studentId != ''">
+                renewal_records.student_id = #{renewalRecordQuery.studentId}
+            </if>
+            <if test="renewalRecordQuery.reviewerId != null and renewalRecordQuery.reviewerId != ''">
+                renewal_records.reviewer_id = #{renewalRecordQuery.reviewerId}
+            </if>
+            <if test="renewalRecordQuery.status != null">
+                renewal_records.status = #{renewalRecordQuery.status}
+            </if>
+        </where>
+    </select>
+</mapper>

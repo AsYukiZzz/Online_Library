@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.uz.mapper.AppointmentRecordsMapper">
+    <select id="pageQuery" resultType="xyz.uz.domain.vo.AppointmentRecordVO">
+        select
+            appointment_records.id,
+            appointment_records.user_id,
+            user.name as "userName",
+            appointment_records.book_id,
+            book.name as "bookName",
+            appointment_records.status,
+            appointment_records.create_user,
+            appointment_records.create_time,
+            appointment_records.update_user,
+            appointment_records.update_time,
+            appointment_records.is_delete,
+            appointment_records.version
+        from
+            appointment_records
+        left join
+            user on user.id = appointment_records.user_id
+        left join
+            book on book.id = appointment_records.book_id
+        <where>
+            <if test="appointmentRecordQuery.userId != null and appointmentRecordQuery.userId != ''">
+                and appointment_records.user_id = #{appointmentRecordQuery.userId}
+            </if>
+            <if test="appointmentRecordQuery.bookId != null and appointmentRecordQuery.bookId != ''">
+                and appointment_records.book_id = #{appointmentRecordQuery.bookId}
+            </if>
+            <if test="appointmentRecordQuery.status != null">
+                and appointment_records.status = #{appointmentRecordQuery.status}
+            </if>
+        </where>
+    </select>
+</mapper>

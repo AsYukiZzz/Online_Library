@@ -1,0 +1,101 @@
+# ===================================================================
+# 服务器端口配置
+# ===================================================================
+server:
+  port: 8080
+    # servlet:
+  # context-path: /api  # (可选) 为所有接口添加统一前缀，如 /api
+
+# ===================================================================
+# Spring Boot 应用基本信息
+# ===================================================================
+spring:
+  application:
+    name: online-library # 应用名称
+
+  # ===================================================================
+  # 数据库连接配置 (DataSource)
+  # ===================================================================
+  datasource:
+    # 使用 Hikari 连接池
+    type: com.zaxxer.hikari.HikariDataSource
+    # 数据库驱动
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 数据库连接URL (请替换为您的数据库地址和名称)
+    # useUnicode=true&characterEncoding=utf8: 解决中文乱码
+    # serverTimezone=Asia/Shanghai: 解决时区问题
+    url: jdbc:mysql://127.0.0.1:3306/online_library?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    # 数据库用户名和密码 (!!!请务必替换为您的!!!)
+    username: root
+    password: jms20041105
+    hikari:
+      # 连接池中允许的最小空闲连接数
+      minimum-idle: 5
+      # 连接池维护的最大连接数
+      maximum-pool-size: 20
+      # 连接超时时间（毫秒）
+      connection-timeout: 30000
+
+  # ===================================================================
+  # JPA / Hibernate 配置 (如果您使用 JPA)
+  # 取消下面的注释来启用
+  # ===================================================================
+  # jpa:
+  #   # 数据库方言
+  #   database-platform: org.hibernate.dialect.MySQL8Dialect
+  #   hibernate:
+  #     # ddl-auto: create(每次启动都删除并重建), update(检查并更新差异), validate(校验), none(不做任何事)
+  #     # 开发环境方便，生产环境建议使用 validate 或 none
+  #     ddl-auto: update
+  #   # 在控制台显示执行的SQL语句，方便调试
+  #   show-sql: true
+  #   # 格式化显示的SQL
+  #   properties:
+  #     hibernate:
+  #       format_sql: true
+
+# ===================================================================
+# MyBatis-Plus 配置 (如果您使用 MyBatis/MyBatis-Plus)
+# ===================================================================
+mybatis-plus:
+  # Mapper.xml 文件的位置
+  mapper-locations: classpath:/mapper/**/*.xml
+  # 实体类包路径，用于自动起别名
+  type-aliases-package: com.yourcompany.project.entity # !!!请替换为您的实体类包路径!!!
+  configuration:
+    # 开启驼峰命名转换：last_name -> lastName
+    map-underscore-to-camel-case: true
+    # 打印 SQL 日志到控制台
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# ===================================================================
+# Sa-Token 权限认证配置
+# 官方文档: https://sa-token.cc
+# ===================================================================
+sa-token:
+  # Token 名称（会在 cookie 和 header 中显示）
+  token-name: satoken
+  # Token 有效期（单位：秒），默认30天，-1代表永久有效
+  timeout: 2592000
+  # 是否允许同一账号多地登录
+  is-concurrent: true
+  # 在多人登录时，是否共享 Token
+  is-share: false
+  # Token 风格（默认 uuid）
+  token-style: uuid
+  # 是否在响应头中输出 Token
+  is-read-header: true
+  # Jwt 密钥
+  jwt-secret-key: qwertyuioppoiuytrewq
+
+# ===================================================================
+# 日志配置
+# ===================================================================
+logging:
+  level:
+    # 根日志级别
+    root: info
+    # 您项目的基础包路径，设置为 debug 级别可以看到更详细的日志
+    com.yourcompany.project: debug # !!!请替换为您项目的根包名!!!
+    # 设置MyBatis的Mapper接口日志级别为DEBUG，以打印SQL语句
+    com.yourcompany.project.mapper: debug # !!!请替换为您的Mapper接口包路径!!!

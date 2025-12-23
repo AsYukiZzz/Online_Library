@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.uz.mapper.BorrowRecordsMapper">
+    <select id="pageQuery" resultType="xyz.uz.domain.vo.BorrowRecordVO">
+        select
+            borrow_records.id,
+            borrow_records.student_id,
+            student.name as "studentName",
+            borrow_records.book_id,
+            book.name as "bookName",
+            borrow_records.borrow_amount,
+            borrow_records.loan_duration,
+            borrow_records.status,
+            borrow_records.review_time,
+            borrow_records.reviewer_id,
+            reviewer.name as "reviewerName",
+            borrow_records.review_comment,
+            borrow_records.due_time,
+            borrow_records.create_user,
+            borrow_records.create_time,
+            borrow_records.update_user,
+            borrow_records.update_time,
+            borrow_records.is_delete,
+            borrow_records.version
+        from
+            borrow_records
+        left join
+            book
+        on
+            borrow_records.book_id = book.id
+        left join
+            user reviewer
+        on
+            borrow_records.reviewer_id = reviewer.id
+        left join
+            user student
+        on
+            borrow_records.student_id = student.id
+        <where>
+            <if test="borrowRecordQuery.name != null and borrowRecordQuery.name != ''">
+                and book.name = #{borrowRecordQuery.name}
+            </if>
+            <if test="borrowRecordQuery.studentId != null and borrowRecordQuery.studentId != ''">
+                and borrow_records.student_id = #{borrowRecordQuery.studentId}
+            </if>
+            <if test="borrowRecordQuery.status != null">
+                and borrow_records.status = #{borrowRecordQuery.status}
+            </if>
+        </where>
+        <choose>
+            <when test="borrowRecordQuery.orders != null and borrowRecordQuery.orders != ''">
+                order by #{borrowRecordQuery.orders}
+            </when>
+            <otherwise>
+                order by borrow_records.status
+            </otherwise>
+        </choose>
+    </select>
+    <select id="getInfoById" resultType="xyz.uz.domain.vo.BorrowRecordVO">
+        select
+            borrow_records.id,
+            borrow_records.student_id,
+            student.name as "studentName",
+            borrow_records.book_id,
+            book.name as "bookName",
+            borrow_records.borrow_amount,
+            borrow_records.loan_duration,
+            borrow_records.status,
+            borrow_records.review_time,
+            borrow_records.reviewer_id,
+            reviewer.name as "reviewerName",
+            borrow_records.review_comment,
+            borrow_records.due_time,
+            borrow_records.create_user,
+            borrow_records.create_time,
+            borrow_records.update_user,
+            borrow_records.update_time,
+            borrow_records.is_delete,
+            borrow_records.version
+        from
+            borrow_records
+        left join
+            book
+        on
+            borrow_records.book_id = book.id
+        left join
+            user reviewer
+        on
+            borrow_records.reviewer_id = reviewer.id
+        left join
+            user student
+        on
+            borrow_records.student_id = student.id
+        where
+            borrow_records.id = #{id}
+    </select>
+    <select id="categoryCount" resultType="java.util.Map">
+        select
+            b.category,
+            count(*) as count
+        from
+            borrow_records br
+                left join
+            book b on br.book_id = b.id
+        where
+            status not in (1,5)
+          and student_id = #{id}
+        group by b.category
+    </select>
+    <update id="updateStatus">
+        update borrow_records set status = #{newStatus}, version = version + 1 where status in
+        <foreach collection="oldStatus" separator="," open="(" close=")" item="status">
+            #{status}
+        </foreach>
+        and version = #{version}
+    </update>
+</mapper>

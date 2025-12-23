@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.uz.mapper.UserMapper">
+    <select id="pageQuery" resultType="xyz.uz.domain.entity.User">
+        select
+            id,
+            username,
+            password,
+            name,
+            permission,
+            phone,
+            emergency_contact,
+            email,
+            address,
+            create_user,
+            create_time,
+            update_user,
+            update_time,
+            is_delete,
+            version
+        from
+            user
+        <where>
+            <if test="userQuery.username != null and userQuery.username != ''">username = concat('%',#{userQuery.username},'%')</if>
+            <if test="userQuery.name != null and userQuery.name != ''">name = concat('%',#{userQuery.name},'%')</if>
+            <if test="userQuery.permission != null and userQuery.permission != ''">permission = #{userQuery.permission}</if>
+        </where>
+    </select>
+</mapper>

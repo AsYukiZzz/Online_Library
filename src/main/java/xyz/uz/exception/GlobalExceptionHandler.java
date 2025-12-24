@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     public Result<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String msg = getBindingResultMsg(e.getBindingResult());
         log.warn("参数校验失败(JSON): {}", msg);
-        return Result.fail("400", msg);
+        return Result.fail(400, msg);
     }
 
     /**
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
     public Result<Void> handleBindException(BindException e) {
         String msg = getBindingResultMsg(e.getBindingResult());
         log.warn("参数校验失败(Form): {}", msg);
-        return Result.fail("400", msg);
+        return Result.fail(400, msg);
     }
 
     /**
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
     public Result<Void> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         String msg = String.format("参数[%s]类型错误，应为[%s]", e.getName(), e.getRequiredType().getSimpleName());
         log.warn("参数类型错误: {}", msg);
-        return Result.fail("400", msg);
+        return Result.fail(400, msg);
     }
 
     /**
@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
     public Result<Void> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
         String msg = String.format("缺少必要参数[%s]", e.getParameterName());
         log.warn("缺少参数: {}", msg);
-        return Result.fail("400", msg);
+        return Result.fail(400, msg);
     }
 
     /**
@@ -84,7 +84,7 @@ public class GlobalExceptionHandler {
     public Result<Void> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         String msg = String.format("不支持[%s]请求，仅支持[%s]", e.getMethod(), e.getSupportedHttpMethods());
         log.warn("请求方法错误: {}", msg);
-        return Result.fail("405", msg);
+        return Result.fail(405, msg);
     }
 
     /**
@@ -94,7 +94,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Result<Void> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         log.warn("JSON解析失败: {}", e.getMessage());
-        return Result.fail("400", "请求Body格式错误或数据类型不匹配");
+        return Result.fail(400, "请求体格式错误或数据类型不匹配");
     }
 
     /**
@@ -106,7 +106,7 @@ public class GlobalExceptionHandler {
     public Result<Void> handleException(Exception e) {
         // 只有这里需要打印 error 级别的堆栈日志，方便排查 bug
         log.error("系统内部异常", e);
-        return Result.fail("500", "系统繁忙，请稍后重试");
+        return Result.fail(500, "系统繁忙，请稍后重试");
     }
 
 

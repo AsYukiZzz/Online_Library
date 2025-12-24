@@ -3,6 +3,6 @@ package xyz.uz.exception;
 
 
 public interface BaseExceptionCode {
-    String getCode();
+    Integer getCode();
     String getDesc();
 }

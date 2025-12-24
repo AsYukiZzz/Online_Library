@@ -4,20 +4,20 @@ import lombok.Getter;
 
 @Getter
 public class BusinessException extends RuntimeException {
-    private final String code;
+    private final Integer code;
 
     /**
      * 使用默认错误码 (例如 500 或 自定义业务通用错误码)
      */
     public BusinessException(String message) {
         super(message);
-        this.code = "500";
+        this.code = 500;
     }
 
     /**
      * 指定错误码和错误信息
      */
-    public BusinessException(String code, String message) {
+    public BusinessException(Integer code, String message) {
         super(message);
         this.code = code;
     }
